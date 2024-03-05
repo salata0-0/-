@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <style>
+    body {
+      text-align: center;
+      font-family: "Trebuchet MS", Arial;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <h1>ESP32 with Servo</h1>
+  <div>
+    <label for="degrees">Enter degrees (0-180):</label>
+    <input type="number" id="degrees" min="0" max="180" value="90">
+  </div>
+  <br/>
+  <button onclick="move('up')">Up</button>
+  <button onclick="move('down')">Down</button>
+  <button onclick="move('left')">Left</button>
+  <button onclick="move('right')">Right</button>
+  <br/><br/>
+  <p>Max Down: </p><p id="maxDown">0</p><br/>
+  <p>Max Up: </p><p id="maxUp">0</p><br/>
+  <p>Max Left: </p><p id="maxLeft">0</p><br/>
+  <p>Max Right: </p><p id="maxRight">0</p><br/>
+  <script src="script.js"></script>
+</body>
+
+</html>
