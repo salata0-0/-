@@ -55,7 +55,14 @@ unsigned long gyroDelay = 10;
 unsigned long previousTime = 0;
 const long timeoutTime = 10000;
 
-String getDateString();
+// Helper function (Basic - adjust for your time zone and requirements)
+String getDateString() {
+  time_t now;
+  struct tm* timeinfo;
+  time(&now);
+  timeinfo = localtime(&now);
+  return String(timeinfo->tm_year + 1900) + "-" + String(timeinfo->tm_mon + 1) + "-" + String(timeinfo->tm_mday);
+}
 
 void initMPU() {
   if (!mpu.begin()) {
@@ -65,6 +72,7 @@ void initMPU() {
   Serial.println("MPU6050 Found!");
 }
 
+// Initialize SPIFFS
 void initSPIFFS() {
   if (!SPIFFS.begin(true)) {
     Serial.println("An error has occurred while mounting SPIFFS");
@@ -87,6 +95,19 @@ void initWiFi() {
 }
 
 // Movement functions
+void centerMotors() {
+  Serial.println("Centering Motors");
+  servoLeft.write(centerAngle);
+  servoRight.write(centerAngle);
+  delay(15);
+  cur_leftServo = centerAngle;
+  cur_rightServo = centerAngle;
+  gyroX = 0;
+  gyroY = 0;
+  expectedStepValue = 0;
+  actualStepValue = 0;
+}
+
 void moveUp(int degrees) {
   // Update expected step based on actual + potential overshoot
   expectedStepValue = abs(int(gyroX)) + 1; // Adjust this value based on your expected overshoot
@@ -197,17 +218,24 @@ void moveRight(int degrees) {
   }
 }
 
-void centerMotors() {
-  Serial.println("Centering Motors");
-  servoLeft.write(centerAngle);
-  servoRight.write(centerAngle);
-  delay(15);
-  cur_leftServo = centerAngle;
-  cur_rightServo = centerAngle;
-  gyroX = 0;
-  gyroY = 0;
-  expectedStepValue = 0;
-  actualStepValue = 0;
+String getGyroReadings() {
+  mpu.getEvent(&a, &g);
+  
+  String dateString = getDateString();
+  String filename = "/data.json";
+
+  File file = SPIFFS.open(filename, FILE_READ);
+  DynamicJsonDocument doc(1024);
+
+  if (file) {
+    deserializeJson(doc, file);
+  }
+
+  String output;
+
+  serializeJson(doc[dateString], output);
+
+  return output;
 }
 
 // Save movement data to JSON
@@ -234,45 +262,6 @@ void saveMovementData() {
   Serial.println("Saved Movement Data");
 }
 
-// Helper function (Basic - adjust for your time zone and requirements)
-String getDateString() {
-  time_t now;
-  struct tm* timeinfo;
-  time(&now);
-  timeinfo = localtime(&now);
-  return String(timeinfo->tm_year + 1900) + "-" + String(timeinfo->tm_mon + 1) + "-" + String(timeinfo->tm_mday);
-}
-
-String getGyroReadings() {
-  mpu.getEvent(&a, &g, &temp);
-
-  float gyroX_temp = g.gyro.x;
-  if (abs(gyroX_temp) > gyroXerror) {
-    gyroX += gyroX_temp / 50.00;
-  }
-
-  float gyroY_temp = g.gyro.y;
-  if (abs(gyroY_temp) > gyroYerror) {
-    gyroY += gyroY_temp / 70.00;
-  }
-
-  String dateString = getDateString();
-  String filename = "/data.json";
-
-  File file = SPIFFS.open(filename, FILE_READ);
-  DynamicJsonDocument doc(1024);
-
-  if (file) {
-    deserializeJson(doc, file);
-  }
-
-  String output;
-
-  serializeJson(doc[dateString], output);
-
-  return output;
-}
-
 void setup() {
   Serial.begin(115200);
   initWiFi();
@@ -289,6 +278,12 @@ void setup() {
   });
 
   server.serveStatic("/", SPIFFS, "/");
+
+  server.on("/center", HTTP_GET, [](AsyncWebServerRequest * request) {
+    Serial.println("Center handler");
+    centerMotors();
+    request->send(200, "text/plain", "OK");
+  });
 
   server.on("/left", HTTP_GET, [](AsyncWebServerRequest * request) {
     Serial.println("Left handler");
@@ -344,12 +339,6 @@ void setup() {
       last_dir = 2;
     }
     moveRight(degrees); // Move by degrees
-    request->send(200, "text/plain", "OK");
-  });
-
-  server.on("/center", HTTP_GET, [](AsyncWebServerRequest * request) {
-    Serial.println("Center handler");
-    centerMotors();
     request->send(200, "text/plain", "OK");
   });
 
