@@ -18,8 +18,8 @@ AsyncWebServer server(80);
 AsyncEventSource events("/events");
 
 // GPIO the servos are attached to
-static const int servoPinLeft = 12;
-static const int servoPinRight = 13;
+static const int servoPinLeft = 16;
+static const int servoPinRight = 17;
 Servo servoLeft, servoRight;
 
 // Movement parameters
