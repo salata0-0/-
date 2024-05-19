@@ -1,0 +1,5 @@
+"Id";"Designator";"Footprint";"Quantity";"Designation";"Supplier and ref";
+1;"U1";"MODULE_ESP32-DEVKITC-32D";1;"ESP32-DEVKITC-32D";;;
+2;"J1,J2";"CONN_01x02";2;"Conn_01x02";;;
+3;"U2";"GY-521";1;"GY-521";;;
+4;"S1";"Push_E-Switch_KS01Q01";1;"SWITCH";;;
