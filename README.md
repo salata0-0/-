@@ -1,1 +1,1 @@
-**Технически помощен уред за рехабилитация**
+**Technical rehabilitation aid**
