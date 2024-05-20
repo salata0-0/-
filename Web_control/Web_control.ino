@@ -9,8 +9,7 @@
 #include <ArduinoJson.h>
 
 // Network credentials
-const char* ssid = "..."; // your ssid
-const char* password = "..."; // your password
+#include "network.ino"
 
 AsyncWebServer server(80);
 
@@ -18,8 +17,8 @@ AsyncWebServer server(80);
 AsyncEventSource events("/events");
 
 // GPIO the servos are attached to
-static const int servoPinLeft = 16;
-static const int servoPinRight = 17;
+static const int servoPinLeft = 12;
+static const int servoPinRight = 13;
 Servo servoLeft, servoRight;
 
 // Movement parameters
@@ -33,7 +32,7 @@ int cur_leftServo, cur_rightServo;
 
 // Create a sensor object
 Adafruit_MPU6050 mpu;
-sensors_event_t a, g;
+sensors_event_t a, g, t;
 
 // Gyroscope sensor deviation
 float gyroXerror = 0.07;
@@ -219,7 +218,7 @@ void moveRight(int degrees) {
 }
 
 String getGyroReadings() {
-  mpu.getEvent(&a, &g);
+  mpu.getEvent(&a, &g, &t);
   
   String dateString = getDateString();
   String filename = "/data.json";
