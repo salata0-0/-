@@ -1,0 +1,82 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Title Styles */
+h1 {
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+  background-color: #2c3e50; /* Box color */
+  color: white; /* Text color */
+  font-size: 2em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Input Container Styles */
+.input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 15px;
+}
+
+.input-container label {
+  font-weight: bold;
+}
+
+.input-container input {
+  padding: 5px;
+  font-size: 1em;
+  width: 60px;
+  text-align: center;
+}
+
+/* Buttons Container Styles */
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  gap: 10px;
+}
+
+.buttons-container button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.buttons-container button:hover {
+  background-color: #2980b9;
+}
+
+/* Save and Load Buttons Styles */
+.save-load-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0 20px 0;
+  gap: 10px;
+}
+
+.save-load-buttons button {
+  background-color: #e67e22;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s

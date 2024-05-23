@@ -1,37 +1,44 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="data:,">
-  <style>
-    body {
-      text-align: center;
-      font-family: "Trebuchet MS", Arial;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  </style>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Line Graphs</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0/dist/chartjs-adapter-moment.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <h1>ESP32 with Servo</h1>
-  <div>
-    <label for="degrees">Enter degrees (0-180):</label>
-    <input type="number" id="degrees" min="0" max="180" value="90">
-  </div>
-  <br/>
-  <button onclick="move('up')">Up</button>
-  <button onclick="move('down')">Down</button>
-  <button onclick="move('left')">Left</button>
-  <button onclick="move('right')">Right</button>
-  <br/><br/>
-  <p>Max Down: </p><p id="maxDown">0</p><br/>
-  <p>Max Up: </p><p id="maxUp">0</p><br/>
-  <p>Max Left: </p><p id="maxLeft">0</p><br/>
-  <p>Max Right: </p><p id="maxRight">0</p><br/>
-  <script src="script.js"></script>
+    <h1>RehaBot</h1>
+    <div class="input-container">
+      <label for="angleInput">Adjust angle (0-70):</label>
+      <input type="number" id="angleInput" min="0" max="70" value="30">
+      <label for="valueInput">Number of reps (1-3):</label>
+      <input type="number" id="valueInput" min="1" max="3" value="3">
+    </div>
+    <div class="buttons-container">
+        <button id="upButton">Up</button>
+        <button id="downButton">Down</button>
+        <button id="centerButton">Center</button>
+        <button id="leftButton">Left</button>
+        <button id="rightButton">Right</button>
+    </div>
+    <div class="save-load-buttons">
+        <button id="saveButton">Save Data</button>
+        <button id="loadButton">Load Data</button>
+    </div>
+    <div class="graph-container">
+        <canvas id="maxGraph"></canvas>
+        <div id="maxValues">
+            <h3>Max values for the day:</h3>  
+            <p><strong>Up:</strong> <span id="maxValueUp"></span></p>
+            <p><strong>Down:</strong> <span id="maxValueDown"></span></p>
+            <p><strong>Left:</strong> <span id="maxValueLeft"></span></p>
+            <p><strong>Right:</strong> <span id="maxValueRight"></span></p>
+        </div>
+        <canvas id="allGraph"></canvas>
+    </div>
+    <script src="script.js"></script>
 </body>
-
 </html>
